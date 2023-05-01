@@ -68,17 +68,20 @@ def calculate_metrics(confusion_matrix):
 if __name__ == '__main__':
     print('training the machine on data...')
     training_data, all_text_dict = train('training_data/train_data.csv', True)
-    test_data = train('training_data/test_gpt.csv', False)
+    test_data = train('training_data/test_validation.csv', False)
 
     feature_sets = list(lexicalFeatures(training_data, test_data))
     feature_sets.append(bagOfWordsFeatures(all_text_dict, test_data))
     feature_sets.append(syntacticFeatures(all_text_dict, test_data))
     #feature_sets.append(extract_unique_word_features(all_text_dict, test_data))
     # remove for speed related reasons
-    feature_sets.append(extract_mean_syllables_per_word_features(all_text_dict, test_data))
-
+    #feature_sets.append(extract_mean_syllables_per_word_features(all_text_dict, test_data))
+    print("predicting:\n")
     classifications = [predictAuthors(fvs, labels, test) for fvs, labels, test in feature_sets]
-    #print(test_data)
+    truth_values = []
+    for el in test_data:
+        truth_values.append(el[0][:3])
+    #print(truth_values)
     # part4: evaluate the probability of random choice
     count_list = probability(training_data)
 
@@ -114,32 +117,55 @@ if __name__ == '__main__':
 
         final_answer[k] = max_val
 
-    for i in range(len(test_id_list)):
-        print('{}\t{}'.format(test_id_list[i], final_answer[i]))
+    """for i in range(len(test_id_list)):
+        print('{}\t{}'.format(test_id_list[i], final_answer[i]))"""
 
     print(final_answer)
-"""
+
     # Sample final_answer and test_id_list
-    final_answer = ['AG', 'jb', 'ss', 'MA', 'rk']
-    test_id_list = ['id1', 'id2', 'id3', 'id4', 'id6']
+    #final_answer = ['AG', 'jb', 'ss', 'MA', 'rk']
+    #test_id_list = ['id1', 'id2', 'id3', 'id4', 'id6']
+    testdict = {0: 'AG', 1: 'AG', 2: 'AG', 3: 'AG', 4: 'AG', 5: 'AG', 6: 'AG', 7: 'AG', 8: 'AG', 9: 'AG',
+           10: 'JB', 11: 'JB', 12: 'JB', 13: 'JB', 14: 'JB', 15: 'JB', 16: 'JB', 17: 'JB', 18: 'JB', 19: 'JB',
+           20: 'RK', 21: 'RK', 22: 'RK', 23: 'RK', 24: 'RK', 25: 'RK', 26: 'RK', 27: 'RK', 28: 'RK', 29: 'RK',
+           30: 'SS', 31: 'SS', 32: 'SS', 33: 'SS', 34: 'SS', 35: 'SS', 36: 'SS', 37: 'SS', 38: 'SS', 39: 'SS',
+           40: 'MA', 41: 'MA', 42: 'MA', 43: 'MA', 44: 'MA', 45: 'MA', 46: 'MA', 47: 'MA', 48: 'MA', 49: 'MA', 50: 'MA'}
 
     # Mapping of ids to corresponding final_answer values
     id_map = {'id1': 'AG', 'id2': 'jb', 'id3': 'ss', 'id4': 'MA', 'id6': 'rk'}
 
-    # Create a confusion matrix
-    confusion_matrix = defaultdict(lambda: defaultdict(int))
+   # Convert ground truth IDs to the corresponding labels
+    ground_truth_labels = [id_map[id_] for id_ in truth_values]
 
-    for i, pred in enumerate(final_answer):
-        true_label = id_map[test_id_list[i]]
-        confusion_matrix[true_label][pred] += 1  
-    
-    accuracy, precision, recall, f1 = calculate_metrics(confusion_matrix)
+    # Extract the predicted labels
+    predicted_labels = list(final_answer.values())
 
-    print("Accuracy:", accuracy)
-    print("Precision:", precision)  
-    print("Recall:", recall)
-    print("F1 Score:", f1)"""
+    # Calculate accuracy, precision, recall, and F1 score
+    accuracy = accuracy_score(ground_truth_labels, predicted_labels)
+    precision = precision_score(ground_truth_labels, predicted_labels, average='weighted')
+    recall = recall_score(ground_truth_labels, predicted_labels, average='weighted')
+    f1 = f1_score(ground_truth_labels, predicted_labels, average='weighted')
 
+    print(f"Accuracy: {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall: {recall:.4f}")
+    print(f"F1 Score: {f1:.4f}")
 
+    # Results
+results = {
+    "Accuracy": accuracy,
+    "Precision": precision,
+    "Recall": recall,
+    "F1 Score": f1,
+}
 
-    #print(training_data)
+# Write the results to a CSV file
+with open("validation_results_table.csv", "w", newline="") as csvfile:
+    fieldnames = ["Metric", "Value"]
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+    writer.writeheader()
+    for key, value in results.items():
+        writer.writerow({"Metric": key, "Value": value})
+
+print("Results saved to 'validation_results_table.csv'")

@@ -13,7 +13,7 @@ def preprocess_text(text):
     clean_text = ''.join(pattern.findall(text))
     return clean_text
 
-def train1(file_path, is_supervised=False):
+def train(file_path, is_supervised=False):
     data = []
     all_text = {}
 
@@ -34,7 +34,7 @@ def train1(file_path, is_supervised=False):
             data.append((text_id, text, author))
     return (data, all_text) if is_supervised else data
 
-def train(filename, supervised=False):
+def train1(filename, supervised=False):
     """
     read the file into data
     :param filename:

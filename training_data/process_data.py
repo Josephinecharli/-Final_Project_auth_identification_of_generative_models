@@ -17,7 +17,7 @@ def split_into_paragraphs(text, author, max_length=20):
         paragraph = ' '.join(paragraph_words)
         
         # Format paragraph as quoted string
-        formatted_p = f"id{i//max_length+1000}-{paragraph}-{author}"
+        formatted_p = f"id{i//max_length+6000}-{paragraph}-{author}"
         formatted_paragraphs.append(formatted_p)
         
         # Move to the next max_length words
@@ -26,13 +26,13 @@ def split_into_paragraphs(text, author, max_length=20):
     return formatted_paragraphs
 
 # Input file path
-input_file = 'a_gorman_validation.txt'
+input_file = 'r_kaur_validation.txt'
 
 # Output file path
-output_file = 'm_angelou.csv'
+output_file = 'rk_validation.csv'
 
 # Author name
-author = 'MA'
+author = 'RK'
 
 # Read input file
 with open(input_file, 'r') as f:

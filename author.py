@@ -67,7 +67,7 @@ def train(filename, supervised=False):
 
 def lexicalFeatures(training_data, test_data):
     # create lexical and punctuational feature vectors
-    print 'processing lexical and punctuation features...'
+    print('processing lexical and punctuation features...')
     lexical_train, punct_train = fvsLexical(training_data)
     lexical_test, punct_test = fvsLexical(test_data)
     return (lexical_train[0], lexical_train[1], lexical_test[0]), (punct_train[0], punct_train[1], punct_test[0])
@@ -115,7 +115,7 @@ def fvsLexical(data):
 
 
 def syntacticFeatures(all_text_dict, test_data):
-    print 'processing syntactic features...'
+    print('processing syntactic features...')
     # make all_text_dict into list of tuple (id, text, author) so that it can be treated as a data type here
     all_data = list((None, sentences, author) for author, sentences in all_text_dict.items())
     train_fvs, train_labels = fvsSyntax(all_data)
@@ -143,7 +143,7 @@ def fvsSyntax(data):
 
 
 def bagOfWordsFeatures(all_text_dict, test_data):
-    print 'processing bag of words features...'
+    print('processing bag of words features...')
     # create all of the word set
     wordset = set()
     # make all_text_dict into list of tuple (id, text, author) so that it can be treated as a data type here
@@ -198,9 +198,9 @@ def probability(training_data):
 
     count_list = reversed(sorted(total_count_map.items(), key=operator.itemgetter(1)))
     result_list = []
-    print '\n', 'random probability'
+    print('\n', 'random probability')
     for ele in count_list:
-        print ele
+        print(ele)
         result_list.append(ele)
 
     return result_list
@@ -208,9 +208,9 @@ def probability(training_data):
 
 if __name__ == '__main__':
     # part1: process file data
-    print 'training the machine on data...'
+    print('training the machine on data...')
     training_data, all_text_dict = train('train.csv', True)
-    test_data = train('test.csv')
+    test_data = train('gpt_test.csv')
 
     # part2: put all feature vectors and labels into a list
     feature_sets = list(lexicalFeatures(training_data, test_data))
@@ -224,17 +224,17 @@ if __name__ == '__main__':
     count_list = probability(training_data)
 
     # part5: print the result table
-    print '\n', 'result table'
+    print('\n', 'result table')
     final_answer = {}
     for results in classifications:
-        print ' '.join(results)
+        print(' '.join(results))
         for test_count, result in enumerate(results, 0):
             if test_count not in final_answer:
                 final_answer[test_count] = []
             final_answer[test_count].append(result)
 
     # part6: process the results and print the final result
-    print '\n', 'final result'
+    print('\n', 'final result')
 
     # create the list of test id
     test_id_list = [''] * len(test_data)
@@ -269,4 +269,4 @@ if __name__ == '__main__':
         final_answer[k] = max_val
 
     for i in range(len(test_id_list)):
-        print '{}\t{}'.format(test_id_list[i], final_answer[i])
+        print('{}\t{}'.format(test_id_list[i], final_answer[i]))
