@@ -1,1 +1,1 @@
-# -Final_Project_auth_identification_of_generative_models
+# Final_Project_auth_identification_of_generative_models
