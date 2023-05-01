@@ -7,7 +7,6 @@ from sklearn.naive_bayes import MultinomialNB
 from collections import defaultdict
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-
 # import feature
 from extract_features import lexicalFeatures, syntacticFeatures, bagOfWordsFeatures, extract_mean_syllables_per_word_features, extract_unique_word_features
 
@@ -16,7 +15,6 @@ from train import train
 
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
-
 
 def predictAuthors(training_fvs, labels, test_fvs):
     """
@@ -167,5 +165,14 @@ with open("validation_results_table.csv", "w", newline="") as csvfile:
     writer.writeheader()
     for key, value in results.items():
         writer.writerow({"Metric": key, "Value": value})
+
+# Write the results to a CSV file
+with open("randomprob.csv", "w", newline="") as csvfile:
+    fieldnames = ["Metric", "Value"]
+    writer = csv.writer(csvfile)
+
+    for el in count_list:
+        writer.writerow([el])
+
 
 print("Results saved to 'validation_results_table.csv'")
