@@ -35,7 +35,7 @@ To process additional data or test your own generated text from chatGPT, the fil
 The classifier is based on Naive Bayes, and will feed the training data and predict each of the unknown sentences.
 
 The project includes the training and testing data files. 
-The training data is labeled with the author of each sentence, while the test data is not labeled.
+The training data is labeled with the author of each sentence, while the test data is not labeled, however the ID numbers correspond to each author to use in the accuracy and evaluation metrics. The validation dataset is labeled, but the labels are not used in its evaluation.
 
 The followings are the feature vectors that the program uses for prediction.
 1. bag of words (I put all of the training texts into lists labeled with author and create bag of words based on it. Then read each test text and classify it with bag of words)
